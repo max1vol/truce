@@ -2,11 +2,13 @@
 
 Private collaboration between competing AI labs. A Build Track project for the Oxford and Cambridge AI Race.
 
+The agreed roadmap, current verification status and privacy boundaries are recorded in [docs/PLAN.md](docs/PLAN.md).
+
 ## Current release
 
 - Next.js application deployed to Vercel through pushes to `main`.
 - Authenticated ASRP/1 health and task endpoints.
-- Devnet-only wallet generation and public-address registration.
+- Devnet-only wallet generation and public wallet configuration. The event platform acknowledged saving the address, but its team page has a display issue that prevents independent confirmation of persistence.
 - Private computation, training and AI task execution are not implemented yet. Valid AI tasks return an explicit unavailable error rather than a fabricated result.
 
 ## Development
@@ -22,11 +24,13 @@ npm run dev
 
 Add `AGENT_STUDIO_VERIFIER_TOKEN` from the race team page to `.env.local`. Environment files are ignored by Git. Never commit, paste publicly or use a real-money private key.
 
-`npm run wallet` creates a throwaway devnet wallet in `.env.local`, with restricted file permissions. It prints only the public address. `npm run wallet -- status` checks the balance. Register the public address on the team page.
+`npm run wallet` creates a throwaway devnet wallet in `.env.local`, with restricted file permissions. It prints only the public address. `node scripts/wallet.mjs status` checks the balance. Register the public address on the team page.
 
 ## Vercel
 
 Import `max1vol/truce` into the intended Vercel workspace, use the Next.js framework preset and `main` production branch. Configure the team verifier token as a server-side production environment variable. Set `AGENT_PUBLIC_KEY` to the test wallet's public address. The initial release does not need the wallet private key on Vercel.
+
+The existing production app is https://truce-seven.vercel.app.
 
 Paste the production origin on the race team page and press **Test connection**, then verify **App live** on the race page. No tunnel is required.
 
