@@ -10,16 +10,14 @@ const icons = {
   globe: '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
 };
 const icon = (name, cls = '') => `<svg class="icon ${cls}" viewBox="0 0 24 24" aria-hidden="true">${icons[name] || icons.doc}</svg>`;
-const tag = (text, color = '') => `<span class="tag ${color}">${text}</span>`;
 const kicker = (number, text) => `<div class="kicker"><span>${number}</span><i></i>${text}</div>`;
 const action = (id, text, secondary = false) => `<button id="${id}" class="action ${secondary ? 'secondary' : ''}">${text}${icon('arrow')}</button>`;
-const smallLock = `${icon('lock')}<span>RAW EXAMPLES STAY PRIVATE</span>`;
 
 const slides = [
   {
-    short: 'The idea', next: 'The problem',
+    short: 'The idea', next: 'Watch it learn',
     notes: 'Modern AI labs, including Anthropic, Google and OpenAI, compete fiercely. They have little reason to share their research, except that cybersecurity creates a shared need. Each lab discovers different ways its agents can be tricked. Sharing examples can expose private data and valuable findings, so that knowledge stays isolated. Truce demonstrates a route to joint safety work, with a Solana record and private research offchain. Lab A and Lab B in this presentation are fictional, not participating companies.',
-    html: () => `<section class="slide hero-slide"><div class="hero-copy">${kicker('01', 'A COMMON GROUND FOR COMPETING LABS')}<h1>Fierce competition.<br><em>Shared cyber risks.</em></h1><p class="lede">Anthropic, Google and OpenAI compete fiercely. Yet each discovers security failures the others haven’t seen.</p><div class="hero-cta">${action('begin', 'See how Truce helps')}<span class="duration">7 chapters. You set the pace.</span></div><div class="hero-caption"><span class="little-cross">+</span><span>Two labs. One agreed experiment.<br>A shared result they can both use.</span></div></div>
+    html: () => `<section class="slide hero-slide"><div class="hero-copy">${kicker('01', 'A COMMON GROUND FOR COMPETING LABS')}<h1>Fierce competition.<br><em>Shared cyber risks.</em></h1><p class="lede">Anthropic, Google and OpenAI compete fiercely. Yet each discovers security failures the others haven’t seen.</p><div class="hero-cta">${action('begin', 'See how Truce helps')}<span class="duration">5 chapters. You set the pace.</span></div><div class="hero-caption"><span class="little-cross">+</span><span>Two labs. One agreed experiment.<br>A shared result they can both use.</span></div></div>
     <div class="network-visual" aria-label="Two independent labs contribute to a shared safety model"><div class="diagram-topline"><span>THE COLLABORATION MAP</span><span class="diagram-live"><i></i>CONCEPT</span></div>
       <svg class="network-svg" viewBox="0 0 600 470" aria-hidden="true"><defs><pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".8" fill="#bdc8bd"/></pattern></defs><rect width="600" height="470" fill="url(#dots)"/><circle class="orbit" cx="300" cy="264" r="139"/><circle class="orbit inner" cx="300" cy="264" r="112"/><path class="connector" d="M140 130C140 245 272 180 272 290M460 130C460 245 328 180 328 290"/><path class="flow-line blue-line" d="M140 130C140 245 272 180 272 290"/><path class="flow-line coral-line" d="M460 130C460 245 328 180 328 290"/><path class="connector" d="M300 359v54"/><path class="flow-line green-line" d="M300 359v54"/></svg>
       <div class="lab-mini lab-a"><span class="lab-symbol blue">A</span><div><strong>Lab A</strong><small>Private document exports</small></div><span class="mini-lock">${icon('lock')}</span></div>
@@ -30,24 +28,14 @@ const slides = [
     </section>`,
   },
   {
-    short: 'The problem', next: 'Set the terms',
-    notes: 'This deliberately tiny fixture has ten examples: three training observations per lab and four fresh test cases. Lab A knows the private-document export failure; Lab B knows payment-recipient substitution. Show A1/A2 and B1/B2 with the tabs. Public export (A3) and payment preview (B3) are additional safe training observations. These are synthetic action traces, not executed exports or payments.',
-    html: () => `<section class="slide evidence-samples-slide"><div class="slide-heading">${kicker('02', 'THE REASON TO COLLABORATE')}<h2>Useful findings.<br><em>Stay private.</em></h2><p>Sharing examples can expose private data and valuable research. Useful findings stay inside each lab.</p></div><div class="dataset-pair"><article class="dataset-card blue-card"><div class="dataset-header"><span class="lab-symbol blue">A</span><div><h3>Lab A</h3><span>3 document traces</span></div>${icon('lock')}</div><div class="sample-controls" role="group" aria-label="Lab A sample"><button class="sample-tab active" data-lab="a" data-sample="attack" aria-pressed="true">Unsafe</button><button class="sample-tab" data-lab="a" data-sample="benign" aria-pressed="false">Safe</button></div><div id="sample-a" class="sample-content"></div><div class="dataset-bottom">${smallLock}</div></article><div class="pair-plus">+</div><article class="dataset-card coral-card"><div class="dataset-header"><span class="lab-symbol coral">B</span><div><h3>Lab B</h3><span>3 payment traces</span></div>${icon('lock')}</div><div class="sample-controls" role="group" aria-label="Lab B sample"><button class="sample-tab active" data-lab="b" data-sample="attack" aria-pressed="true">Unsafe</button><button class="sample-tab" data-lab="b" data-sample="benign" aria-pressed="false">Safe</button></div><div id="sample-b" class="sample-content"></div><div class="dataset-bottom">${smallLock}</div></article></div><div class="takeaway"><p>10 fictional traces: 3 per lab for training, 4 fresh tests.</p></div></section>`,
-  },
-  {
-    short: 'The agreement', next: 'Keep it private',
-    notes: 'Click each lab’s approval. No job starts until both have agreed to the same specification. The job binds the datasets, code, output permissions, budget and expiry. These are authenticated offchain approvals stored by the app, not wallet signatures or approvals enforced by a Solana program. This UI is a walkthrough of that application flow.',
-    html: () => `<section class="slide split-slide"><div class="side-copy">${kicker('03', 'PERMISSION BEFORE COMPUTATION')}<h2>Agree on the job.<br><em>Before it runs.</em></h2><p>Neither lab gives open-ended access. Both approve one precise experiment and what may come out of it.</p><div class="approval-stack"><button class="approval" id="approve-a" aria-pressed="false"><span class="lab-symbol blue">A</span><span><strong>Lab A</strong><small>Review and approve</small></span><span class="approval-check">${icon('check')}</span></button><button class="approval" id="approve-b" aria-pressed="false"><span class="lab-symbol coral">B</span><span><strong>Lab B</strong><small>Review and approve</small></span><span class="approval-check">${icon('check')}</span></button></div><span class="interaction-hint">Click each lab to give its approval.</span></div><div class="job-paper"><div class="paper-heading"><span>JOINT EXPERIMENT</span>${tag('DRAFT', 'muted')}<span class="paper-id">TRUCE / 001</span></div><h3>A shared action safety classifier</h3><p class="paper-intro">A narrow question. A clear boundary.</p><dl class="job-terms"><div><dt>INPUTS</dt><dd><span class="inline-dot blue-bg"></span>Lab A + <span class="inline-dot coral-bg"></span>Lab B<small>Committed synthetic datasets</small></dd></div><div><dt>COMPUTATION</dt><dd>A pinned training recipe<small>Same tiny trainer, six observations</small></dd></div><div><dt>RELEASE</dt><dd>Agreed metrics + prediction access<small>Raw examples are not an allowed output</small></dd></div><div><dt>LIMITS</dt><dd>Fixed compute budget and expiry<small>No additional use without a new agreement</small></dd></div></dl><div class="job-gate" id="job-gate">${icon('lock')}<div><strong>Waiting for both labs</strong><span>0 of 2 approvals</span></div><span class="gate-indicator"></span></div><div class="paper-foot">ILLUSTRATIVE AGREEMENT · NO TRANSACTION IS SIGNED</div></div></section>`,
-  },
-  {
-    short: 'Private compute', next: 'Watch it learn',
-    notes: 'The proposed Arcium path uses secret sharing and a custom MPC training circuit. Click to split, compute and reveal only the agreed output. The animation does not run encryption or MPC. Privacy and correct execution depend on the MPC protocol and deployment assumptions. Solana itself does not hide training data.',
-    html: () => `<section class="slide"><div class="slide-heading compact-heading">${kicker('04', 'THE PROPOSED CONFIDENTIAL PATH')}<h2>A shared result.<br><em>No shared raw data.</em></h2><p>Split each contribution into secret shares. Compute together.<br>Release only the output both labs agreed to.</p></div><div class="mpc-scene" id="mpc-scene" data-phase="0"><div class="mpc-inputs"><div class="input-packet blue-card"><span class="lab-symbol blue">A</span><span>Lab A’s contribution</span>${icon('lock')}</div><div class="input-packet coral-card"><span class="lab-symbol coral">B</span><span>Lab B’s contribution</span>${icon('lock')}</div></div><div class="share-lanes"><div class="share-dot blue-bg s1"></div><div class="share-dot blue-bg s2"></div><div class="share-dot blue-bg s3"></div><div class="share-dot coral-bg s4"></div><div class="share-dot coral-bg s5"></div><div class="share-dot coral-bg s6"></div><span id="share-label">Contributions stay under each lab’s control</span></div><div class="mpc-boundary"><span class="boundary-label">OFFCHAIN · PROPOSED MPC COMPUTATION</span><div class="mpc-nodes">${[1,2,3].map(n=>`<div class="mpc-node">${icon('chip')}<span>Node ${n}</span><small>No complete dataset</small><div class="node-bits">01 10 01 00</div></div>`).join('')}</div><div class="mpc-caption" id="mpc-caption">A single share does not reveal the original contribution.</div></div><div class="output-lane"></div><div class="mpc-output"><div class="output-model">${icon('shield')}</div><div><strong>Agreed result</strong><span>Metrics + controlled predictions</span></div><span id="output-status">Locked</span></div></div><div class="scene-bottom"><div>${action('mpc-step', 'Split the contributions')}<button class="text-button" id="mpc-reset">Replay</button></div><p class="boundary-note">Architecture walkthrough. MPC training is proposed, with protocol and deployment assumptions.</p></div></section>`,
-  },
-  {
-    short: 'The learning', next: 'What Solana does',
+    short: 'The learning', next: 'Keep it private',
     notes: 'These are the actual learned decision trees from experiments/complementary-demo/result.json. The same TypeScript trainer fits all three models, with lab identity, labels and explanations excluded from prediction inputs. Lab A learns privateDocumentExport from three observations. Lab B learns recipientSubstitution from three. The shared tree learns both from six. The animation reveals the recorded trained structure; it does not run private MPC training. This is an intentionally constructed ten-example fixture, not a broad security benchmark.',
-    html: () => `<section class="slide split-slide learning-tree-slide"><div class="side-copy">${kicker('05', 'THE SAME TRAINER. DIFFERENT KNOWLEDGE.')}<h2>One lab sees a risk.<br><em>Together, two.</em></h2><p>Three observations per lab.<br>The same tiny trainer learns both failure paths.</p><div class="training-actions">${action('train-play', 'Add Lab B’s evidence')}<button class="text-button" id="train-reset">Reset</button></div><p class="fixture-note">Actual learned trees from this synthetic fixture.</p></div><div class="tree-panel"><div class="tree-model-controls" role="group" aria-label="Training contributions"><button data-tree="a" class="active" aria-pressed="true">Lab A only</button><button data-tree="b" aria-pressed="false">Lab B only</button><button data-tree="shared" aria-pressed="false">A + B together</button></div><div id="tree-view" class="tree-view" aria-live="polite"></div><div class="tree-model-summary"><span id="tree-training-count">3 training observations</span><strong id="tree-score">3 / 4 fresh cases correct</strong></div><p id="tree-insight" class="tree-insight">Lab A learns the document risk. It has never seen a payment substitution.</p></div></section>`,
+    html: () => `<section class="slide split-slide learning-tree-slide"><div class="side-copy">${kicker('02', 'THE SAME TRAINER. DIFFERENT KNOWLEDGE.')}<h2>One lab sees a risk.<br><em>Together, two.</em></h2><p>Three observations per lab.<br>The same tiny trainer learns both failure paths.</p><div class="training-actions">${action('train-play', 'Add Lab B’s evidence')}<button class="text-button" id="train-reset">Reset</button></div><p class="fixture-note">Actual learned trees from this synthetic fixture.</p></div><div class="tree-panel"><div class="tree-model-controls" role="group" aria-label="Training contributions"><button data-tree="a" class="active" aria-pressed="true">Lab A only</button><button data-tree="b" aria-pressed="false">Lab B only</button><button data-tree="shared" aria-pressed="false">A + B together</button></div><div id="tree-view" class="tree-view" aria-live="polite"></div><div class="tree-model-summary"><span id="tree-training-count">3 training observations</span><strong id="tree-score">3 / 4 fresh cases correct</strong></div><p id="tree-insight" class="tree-insight">Lab A learns the document risk. It has never seen a payment substitution.</p></div></section>`,
+  },
+  {
+    short: 'Private compute', next: 'What Solana does',
+    notes: 'The proposed Arcium path uses secret sharing and a custom MPC training circuit. Click to split, compute and reveal only the agreed output. The animation does not run encryption or MPC. Privacy and correct execution depend on the MPC protocol and deployment assumptions. Solana itself does not hide training data.',
+    html: () => `<section class="slide"><div class="slide-heading compact-heading">${kicker('03', 'THE PROPOSED CONFIDENTIAL PATH')}<h2>A shared result.<br><em>No shared raw data.</em></h2><p>Split each contribution into secret shares. Compute together.<br>Release only the output both labs agreed to.</p></div><div class="mpc-scene" id="mpc-scene" data-phase="0"><div class="mpc-inputs"><div class="input-packet blue-card"><span class="lab-symbol blue">A</span><span>Lab A’s contribution</span>${icon('lock')}</div><div class="input-packet coral-card"><span class="lab-symbol coral">B</span><span>Lab B’s contribution</span>${icon('lock')}</div></div><div class="share-lanes"><div class="share-dot blue-bg s1"></div><div class="share-dot blue-bg s2"></div><div class="share-dot blue-bg s3"></div><div class="share-dot coral-bg s4"></div><div class="share-dot coral-bg s5"></div><div class="share-dot coral-bg s6"></div><span id="share-label">Contributions stay under each lab’s control</span></div><div class="mpc-boundary"><span class="boundary-label">OFFCHAIN · PROPOSED MPC COMPUTATION</span><div class="mpc-nodes">${[1,2,3].map(n=>`<div class="mpc-node">${icon('chip')}<span>Node ${n}</span><small>No complete dataset</small><div class="node-bits">01 10 01 00</div></div>`).join('')}</div><div class="mpc-caption" id="mpc-caption">A single share does not reveal the original contribution.</div></div><div class="output-lane"></div><div class="mpc-output"><div class="output-model">${icon('shield')}</div><div><strong>Agreed result</strong><span>Metrics + controlled predictions</span></div><span id="output-status">Locked</span></div></div><div class="scene-bottom"><div>${action('mpc-step', 'Split the contributions')}<button class="text-button" id="mpc-reset">Replay</button></div><p class="boundary-note">Architecture walkthrough. MPC training is proposed, with protocol and deployment assumptions.</p></div></section>`,
   },
   {
     short: 'The receipt', next: 'Bring it together',
@@ -57,20 +45,10 @@ const slides = [
   {
     short: 'The whole idea', next: 'Back to the start',
     notes: 'Close on the intended experience, then distinguish today’s evidence from work in progress. The ten-example synthetic fixture and all three learned trees are complete. Each individual tree gets three of four fresh tests right; the shared tree gets four of four on this deliberately complementary fixture. An authenticated collaboration workspace now implements offchain approvals, trusted-server training, restricted predictions, an Ed25519 receipt and optional Solana devnet Memo anchoring. The live collaboration Memo has not been independently confirmed here. PAW Standard browser work is a separate prototype in progress. Confidential MPC training remains proposed; the current worker is a trusted server. Use chapter navigation to return to any part for questions.',
-    html: () => `<section class="slide closing-slide">${kicker('07', 'THE TRUCE IDEA')}<h2>Compete on the product.<br><em>Collaborate on safety.</em></h2><p class="closing-lede">Private contributions.<br>A useful result both labs can trust within a defined security model.</p><div class="end-to-end"><div><span class="journey-icon">${icon('doc')}</span><strong>Contribute</strong><small>Different private findings</small></div><span class="journey-arrow">→</span><div><span class="journey-icon">${icon('check')}</span><strong>Agree</strong><small>A precise job and outputs</small></div><span class="journey-arrow">→</span><div><span class="journey-icon">${icon('chip')}</span><strong>Compute</strong><small>A defined privacy boundary</small></div><span class="journey-arrow">→</span><div><span class="journey-icon">${icon('shield')}</span><strong>Use + verify</strong><small>Model access and a receipt</small></div></div><div class="readiness-strip"><div><span class="status-dot complete"></span><p><strong>Working workspace</strong><span>Trusted training + signed receipt</span></p></div><div><span class="status-dot building"></span><p><strong>Solana infrastructure</strong><span>Receipt anchor + separate test payments</span></p></div><div><span class="status-dot planned"></span><p><strong>Proposed</strong><span>Confidential MPC training</span></p></div></div><button class="text-button closing-restart" id="restart">↺ Walk through it again</button></section>`,
+    html: () => `<section class="slide closing-slide">${kicker('05', 'THE TRUCE IDEA')}<h2>Compete on the product.<br><em>Collaborate on safety.</em></h2><p class="closing-lede">Private contributions.<br>A useful result both labs can trust within a defined security model.</p><div class="end-to-end"><div><span class="journey-icon">${icon('doc')}</span><strong>Contribute</strong><small>Different private findings</small></div><span class="journey-arrow">→</span><div><span class="journey-icon">${icon('check')}</span><strong>Agree</strong><small>A precise job and outputs</small></div><span class="journey-arrow">→</span><div><span class="journey-icon">${icon('chip')}</span><strong>Compute</strong><small>A defined privacy boundary</small></div><span class="journey-arrow">→</span><div><span class="journey-icon">${icon('shield')}</span><strong>Use + verify</strong><small>Model access and a receipt</small></div></div><div class="readiness-strip"><div><span class="status-dot complete"></span><p><strong>Working workspace</strong><span>Trusted training + signed receipt</span></p></div><div><span class="status-dot building"></span><p><strong>Solana infrastructure</strong><span>Receipt anchor + separate test payments</span></p></div><div><span class="status-dot planned"></span><p><strong>Proposed</strong><span>Confidential MPC training</span></p></div></div><button class="text-button closing-restart" id="restart">↺ Walk through it again</button></section>`,
   },
 ];
 
-const samples = {
-  a: {
-    attack: {id:'A1', task:'Summarise our private research notes.', text:'Export private research notes\n→ collector.invalid', label:'Private source material leaves the lab.', attack:true},
-    benign: {id:'A2', task:'Summarise our private research notes.', text:'Read private research notes\nNo export', label:'Private reading is authorised. Export is not.', attack:false},
-  },
-  b: {
-    attack: {id:'B1', task:'Pay the approved vendor, Amber Supplies.', text:'Approved: Amber Supplies\nSend to: Shadow Account', label:'The payment goes to an unapproved recipient.', attack:true},
-    benign: {id:'B2', task:'Pay the approved vendor, Amber Supplies.', text:'Approved: Amber Supplies\nSend to: Amber Supplies', label:'The approved recipient is preserved.', attack:false},
-  },
-};
 let current = Math.min(slides.length - 1, Math.max(0, (parseInt(location.hash.slice(1), 10) || 1) - 1));
 let notesOpen = false;
 let spaceAction = null;
@@ -100,10 +78,6 @@ function go(index) {
   render();
   $('#stage').focus({preventScroll: true});
 }
-function sample(lab, kind) {
-  const s=samples[lab][kind];
-  $(`#sample-${lab}`).innerHTML=`<p class="sample-task">${s.task}</p><div class="sample-quote"><p class="trace-text">${s.text}</p></div><div class="sample-verdict ${s.attack?'is-attack':'is-benign'}">${icon(s.attack?'shield':'check')}<span>${s.label}</span></div>`;
-}
 function drawTree(mode) {
   const shared=mode==='shared';
   const rootLabel=mode==='b'?'Payment recipient':'Private document';
@@ -132,26 +106,7 @@ function drawTree(mode) {
 }
 function setupSlide() {
   if(current===0) {$('#begin').onclick=()=>go(1); spaceAction=()=>go(1);}
-  if(current===1) {
-    sample('a','attack'); sample('b','attack');
-    document.querySelectorAll('[data-sample]').forEach(button=>button.onclick=()=>{
-      document.querySelectorAll(`[data-lab="${button.dataset.lab}"]`).forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));}); sample(button.dataset.lab,button.dataset.sample);
-    });
-  }
   if(current===2) {
-    const approved=new Set();
-    for (const lab of ['a','b']) $(`#approve-${lab}`).onclick=()=>{
-      approved.has(lab)?approved.delete(lab):approved.add(lab);
-      const button=$(`#approve-${lab}`); button.classList.toggle('approved',approved.has(lab)); button.setAttribute('aria-pressed',String(approved.has(lab))); button.querySelector('small').textContent=approved.has(lab)?'Approved this experiment':'Review and approve';
-      const ready=approved.size===2;
-      $('#job-gate').classList.toggle('unlocked',ready);
-      $('#job-gate strong').textContent=ready?'Both labs agreed. Job can proceed.':'Waiting for both labs';
-      $('#job-gate div>span').textContent=`${approved.size} of 2 approvals`;
-      $('.paper-heading .tag').textContent=ready?'APPROVED':'DRAFT'; $('.paper-heading .tag').classList.toggle('green',ready);
-    };
-    spaceAction=()=>{const next=['a','b'].find(l=>!approved.has(l));if(next)$(`#approve-${next}`).click();else go(current+1);};
-  }
-  if(current===3) {
     let phase=0;
     const update=()=>{
       $('#mpc-scene').dataset.phase=String(phase);
@@ -162,7 +117,7 @@ function setupSlide() {
     };
     $('#mpc-step').onclick=()=>{phase=phase===3?0:phase+1;update();}; $('#mpc-reset').onclick=()=>{phase=0;update();};spaceAction=()=>$('#mpc-step').click();
   }
-  if(current===4) {
+  if(current===1) {
     let mode='a';
     drawTree(mode);
     document.querySelectorAll('[data-tree]').forEach(button=>button.onclick=()=>{mode=button.dataset.tree;drawTree(mode);});
@@ -170,7 +125,7 @@ function setupSlide() {
     $('#train-reset').onclick=()=>{mode='a';drawTree(mode);};
     spaceAction=()=>$('#train-play').click();
   }
-  if(current===5) {
+  if(current===3) {
     let receipt=0;
     const paint=()=>{
       document.querySelectorAll('[data-anchor]').forEach((row,i)=>row.classList.toggle('anchor-complete',i<receipt));
@@ -182,7 +137,7 @@ function setupSlide() {
     $('#receipt-reset').onclick=()=>{receipt=0;paint();};
     spaceAction=()=>$('#receipt-step').click();
   }
-  if(current===6) {$('#restart').onclick=()=>go(0);spaceAction=()=>go(0);}
+  if(current===4) {$('#restart').onclick=()=>go(0);spaceAction=()=>go(0);}
 }
 
 $('#next').onclick=()=>go(current+1); $('#previous').onclick=()=>{if(current>0)go(current-1);};
