@@ -35,6 +35,8 @@ Implemented:
 - Solana devnet wallet generation using `@solana/kit`.
 - Private wallet storage in the ignored `.env.local` file, with restricted permissions.
 - Public wallet configuration on the Vercel application.
+- Fixed-devnet USDC payment workflows with exact recipient, amount and memo checks, a 0.05 test-USDC transfer cap and a 0.10 test-USDC cumulative cap.
+- A private Blob journal persists signed bytes and reserves budget before broadcasting. Retries reuse the recorded transaction; confirmed results survive later status-update failures.
 
 Verified on the event platform:
 
@@ -45,16 +47,25 @@ Verified on the event platform:
 - App live passed: 150 points.
 - AI feature working passed: 200 points. Fresh arithmetic, instruction following, health and nonce checks all passed on the first attempt.
 - Agent uses tools passed: 300 points. The organiser recorded both lookups and the exchange-rate call, verified the computed total and checked the reported results on the first attempt.
-- Last verified total: **700 points**.
+- Agentic end-to-end payment passed: 400 points. The organiser confirmed the devnet transfer, amount, recipient and attempt-specific memo.
 - App live receipt: `1735AD7F`.
 - AI feature working receipt: `82198361`.
 - Agent uses tools receipt: `3A0FA0EA`.
+- Agentic end-to-end payment receipt: `872A63DC`.
 - AI and tool deployment: commit `f8b7f0f` on `main`, verified on 25 October 2026.
+- Payment deployment: commit `139f967` on `main`, verified on 25 October 2026.
+- Operation Found it passed: 30 points, receipt `FA9D1FE3`.
+- Operation Exact passed: 50 points, receipt `243A0C94`.
+- Operation Verified passed: 70 points, receipt `C58AB771`.
+- Minesweeper Minted passed: 90 points, receipt `037B7F6B`.
+- Minesweeper Presented passed: 80 points, receipt `CDF7D583`.
+- Minesweeper Fast hands passed: 30 points, receipt `8465D274`.
+- All six optional challenges passed in order on their first verification attempts. Operation used the exact 8,929 test-CRED base-unit fee with its matching memo. Minesweeper minted at slot `515040156` and presented at slot `515040161`, a five-slot interval within the 150-slot limit.
+- Last verified total: **1,450 points**.
 
 Not implemented or not verified:
 
-- Payment signing and other task capabilities.
-- Wallet funding with devnet SOL and USDC.
+- Other task capabilities beyond the supported responses, read-only tools and specific devnet payment workflow.
 - Private data collaboration, confidential computing, model training or joint evaluation.
 - A final Build Track submission.
 - Independent confirmation that the event platform persisted the wallet registration.
@@ -79,12 +90,11 @@ The private key must never be committed or copied into this document.
 
 The user has asked to focus on connecting and verifying the application before pursuing training or the larger privacy research prototype.
 
-1. **Agentic end-to-end payment, 400 points:** a requested devnet USDC payment settles to the required recipient with the required amount and memo, and the app returns its transaction signature.
-2. **Submitted, 200 points:** an accurate final submission is received by the official Build Track.
+Keep the completed Build Track submission as an editable draft, as the user explicitly requested. Do not submit it without a new instruction. All six optional challenges are complete.
 
-The remaining core milestones total 600 points, bringing the core total to 1,300 if they both pass. Recover the existing dedicated wallet's signing key before implementing payment; this clone currently has only its public address.
+The remaining core milestone is Submitted, worth 200 points. The user wants to edit the entry before final submission. All required Build Track fields are saved, accurately separating implemented infrastructure from planned confidential collaboration and training.
 
-Optional Operation and Minesweeper challenges offer another 350 points. They have separate instructions, ordered prerequisites and opening windows. Check the live race before spending time on them. Their completion is separate from the Truce product demonstration.
+The optional Operation and Minesweeper challenges awarded 350 points in total. They used the existing registered wallet and devnet test CRED; no application endpoint changes were needed. Their completion is separate from the Truce product demonstration.
 
 ### Step 1: connect a real model
 
@@ -115,6 +125,8 @@ Our eventual product tools and the organiser's verification tools are different 
 
 ### Step 3: implement devnet payments
 
+- Completed and verified live. The original dedicated wallet was restored and received 20 devnet USDC from Circle. Two 0.01 test-USDC transfers settled during verification, with 0.02 test USDC reserved in the journal. The first settled transfer exposed a compressed-response ETag issue, which was fixed before the successful verification.
+- Fifteen offline payment tests cover actual ephemeral signing, exact devnet mint/amount/memo, concurrent requests, cumulative limits, uncertain broadcasts, missing or weak ETags, storage failures and retry behavior. The RPC and token mint are fixed to devnet; these are test-token transfers.
 - Retain the existing dedicated test wallet.
 - Confirm event-platform wallet registration where required, accounting for the team-page display issue.
 - Fund it with devnet SOL for fees and devnet USDC for transfers.
