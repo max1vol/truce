@@ -144,7 +144,7 @@ export function validateRaceTask(value: unknown): string | null {
     return "The task requires an input value.";
   }
   if (
-    (task.type === "extract" || task.type === "run_workflow") &&
+    task.type === "extract" &&
     !isRecord(task.schema) &&
     typeof task.schema !== "boolean"
   ) {

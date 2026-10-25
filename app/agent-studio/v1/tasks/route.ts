@@ -9,6 +9,7 @@ import {
   validateRaceTask,
 } from "@/lib/race";
 import { AiTaskError, executeAiTask } from "@/lib/ai";
+import { PaymentTaskError, executePaymentTask } from "@/lib/payments";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -28,6 +29,16 @@ export async function POST(request: Request): Promise<Response> {
   const nonce = readNonce(body);
   const validationError = validateRaceTask(body);
   if (validationError) return raceError(400, "invalid_input", validationError, nonce);
+
+  if (isRecord(body) && isRecord(body.task) && body.task.type === "run_workflow") {
+    try {
+      const output = await executePaymentTask(body, { signal: request.signal });
+      return raceJson({ protocol: RACE_PROTOCOL, nonce, status: "ok", output });
+    } catch (error) {
+      if (error instanceof PaymentTaskError) return raceError(error.status, error.code, error.message, nonce);
+      return raceError(503, "upstream_unavailable", "The devnet payment could not be completed.", nonce);
+    }
+  }
 
   if (isRecord(body) && isRecord(body.task) && (body.task.type === "respond" || body.task.type === "use_tools")) {
     try {
