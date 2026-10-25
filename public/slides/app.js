@@ -19,7 +19,7 @@ const slides = [
   {
     short: 'The idea', next: 'The problem',
     notes: 'Modern AI labs, including Anthropic, Google and OpenAI, compete fiercely. They have little reason to share their research, except that cybersecurity creates a shared need. Each lab discovers different ways its agents can be tricked. Sharing examples can expose private data and valuable findings, so that knowledge stays isolated. Truce demonstrates a route to joint safety work, with a Solana record and private research offchain. Lab A and Lab B in this presentation are fictional, not participating companies.',
-    html: () => `<section class="slide hero-slide"><div class="hero-copy">${kicker('01', 'A COMMON GROUND FOR COMPETING LABS')}<h1>Fierce competition.<br><em>Shared cyber risks.</em></h1><p class="lede">Anthropic, Google and OpenAI compete fiercely. Yet each discovers security failures the others haven’t seen.</p><div class="hero-cta">${action('begin', 'See how Truce helps')}<span class="duration">9 chapters. You set the pace.</span></div><div class="hero-caption"><span class="little-cross">+</span><span>Two labs. One agreed experiment.<br>A shared result they can both use.</span></div></div>
+    html: () => `<section class="slide hero-slide"><div class="hero-copy">${kicker('01', 'A COMMON GROUND FOR COMPETING LABS')}<h1>Fierce competition.<br><em>Shared cyber risks.</em></h1><p class="lede">Anthropic, Google and OpenAI compete fiercely. Yet each discovers security failures the others haven’t seen.</p><div class="hero-cta">${action('begin', 'See how Truce helps')}<span class="duration">7 chapters. You set the pace.</span></div><div class="hero-caption"><span class="little-cross">+</span><span>Two labs. One agreed experiment.<br>A shared result they can both use.</span></div></div>
     <div class="network-visual" aria-label="Two independent labs contribute to a shared safety model"><div class="diagram-topline"><span>THE COLLABORATION MAP</span><span class="diagram-live"><i></i>CONCEPT</span></div>
       <svg class="network-svg" viewBox="0 0 600 470" aria-hidden="true"><defs><pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".8" fill="#bdc8bd"/></pattern></defs><rect width="600" height="470" fill="url(#dots)"/><circle class="orbit" cx="300" cy="264" r="139"/><circle class="orbit inner" cx="300" cy="264" r="112"/><path class="connector" d="M140 130C140 245 272 180 272 290M460 130C460 245 328 180 328 290"/><path class="flow-line blue-line" d="M140 130C140 245 272 180 272 290"/><path class="flow-line coral-line" d="M460 130C460 245 328 180 328 290"/><path class="connector" d="M300 359v54"/><path class="flow-line green-line" d="M300 359v54"/></svg>
       <div class="lab-mini lab-a"><span class="lab-symbol blue">A</span><div><strong>Lab A</strong><small>Private document exports</small></div><span class="mini-lock">${icon('lock')}</span></div>
@@ -45,19 +45,9 @@ const slides = [
     html: () => `<section class="slide"><div class="slide-heading compact-heading">${kicker('04', 'THE PROPOSED CONFIDENTIAL PATH')}<h2>A shared result.<br><em>No shared raw data.</em></h2><p>Split each contribution into secret shares. Compute together.<br>Release only the output both labs agreed to.</p></div><div class="mpc-scene" id="mpc-scene" data-phase="0"><div class="mpc-inputs"><div class="input-packet blue-card"><span class="lab-symbol blue">A</span><span>Lab A’s contribution</span>${icon('lock')}</div><div class="input-packet coral-card"><span class="lab-symbol coral">B</span><span>Lab B’s contribution</span>${icon('lock')}</div></div><div class="share-lanes"><div class="share-dot blue-bg s1"></div><div class="share-dot blue-bg s2"></div><div class="share-dot blue-bg s3"></div><div class="share-dot coral-bg s4"></div><div class="share-dot coral-bg s5"></div><div class="share-dot coral-bg s6"></div><span id="share-label">Contributions stay under each lab’s control</span></div><div class="mpc-boundary"><span class="boundary-label">OFFCHAIN · PROPOSED MPC COMPUTATION</span><div class="mpc-nodes">${[1,2,3].map(n=>`<div class="mpc-node">${icon('chip')}<span>Node ${n}</span><small>No complete dataset</small><div class="node-bits">01 10 01 00</div></div>`).join('')}</div><div class="mpc-caption" id="mpc-caption">A single share does not reveal the original contribution.</div></div><div class="output-lane"></div><div class="mpc-output"><div class="output-model">${icon('shield')}</div><div><strong>Agreed result</strong><span>Metrics + controlled predictions</span></div><span id="output-status">Locked</span></div></div><div class="scene-bottom"><div>${action('mpc-step', 'Split the contributions')}<button class="text-button" id="mpc-reset">Replay</button></div><p class="boundary-note">Architecture walkthrough. MPC training is proposed, with protocol and deployment assumptions.</p></div></section>`,
   },
   {
-    short: 'The learning', next: 'See the evidence',
+    short: 'The learning', next: 'What Solana does',
     notes: 'These are the actual learned decision trees from experiments/complementary-demo/result.json. The same TypeScript trainer fits all three models, with lab identity, labels and explanations excluded from prediction inputs. Lab A learns privateDocumentExport from three observations. Lab B learns recipientSubstitution from three. The shared tree learns both from six. The animation reveals the recorded trained structure; it does not run private MPC training. This is an intentionally constructed ten-example fixture, not a broad security benchmark.',
     html: () => `<section class="slide split-slide learning-tree-slide"><div class="side-copy">${kicker('05', 'THE SAME TRAINER. DIFFERENT KNOWLEDGE.')}<h2>One lab sees a risk.<br><em>Together, two.</em></h2><p>Three observations per lab.<br>The same tiny trainer learns both failure paths.</p><div class="training-actions">${action('train-play', 'Add Lab B’s evidence')}<button class="text-button" id="train-reset">Reset</button></div><p class="fixture-note">Actual learned trees from this synthetic fixture.</p></div><div class="tree-panel"><div class="tree-model-controls" role="group" aria-label="Training contributions"><button data-tree="a" class="active" aria-pressed="true">Lab A only</button><button data-tree="b" aria-pressed="false">Lab B only</button><button data-tree="shared" aria-pressed="false">A + B together</button></div><div id="tree-view" class="tree-view" aria-live="polite"></div><div class="tree-model-summary"><span id="tree-training-count">3 training observations</span><strong id="tree-score">3 / 4 fresh cases correct</strong></div><p id="tree-insight" class="tree-insight">Lab A learns the document risk. It has never seen a payment substitution.</p></div></section>`,
-  },
-  {
-    short: 'The evidence', next: 'Try the function',
-    notes: 'The four rows are the four fresh traces A4, A5, B4 and B5 from the ten-example complementary fixture. A-only misses the unapproved payment recipient. B-only misses the private document export. Both allow the two safe cases. The shared model gets all four right. This benefit is intentionally constructed on a tiny synthetic fixture, not a security performance claim. Reveal one row at a time, or show all. The recorded result and exact learned trees are available through the evidence link.',
-    html: () => `<section class="slide fixture-results-slide"><div class="results-heading"><div>${kicker('06', 'FOUR FRESH CASES. ONE CLEAR DIFFERENCE.')}<h2>Two blind spots. <em>One shared model.</em></h2></div></div><div class="comparison-panel"><table class="comparison-table"><thead><tr><th scope="col">Fresh case</th><th scope="col">Lab A only</th><th scope="col">Lab B only</th><th scope="col" class="shared-column">A + B</th></tr></thead><tbody id="comparison-rows"></tbody><tfoot><tr><th scope="row">Correct on fresh cases</th><td>3 <span>/ 4</span></td><td>3 <span>/ 4</span></td><td class="shared-column">4 <span>/ 4</span></td></tr></tfoot></table></div><div class="comparison-bottom"><div class="comparison-actions">${action('reveal-case', 'Reveal the first case')}<button class="text-button" id="reveal-all">Show all four</button></div><p id="comparison-insight">The same trainer learns from different observations.</p><a class="text-link" href="./evidence.json" target="_blank" rel="noopener">Inspect the recorded result ↗</a></div><p class="fixture-note">A deliberately complementary fixture: 6 training observations, 4 fresh tests.</p></section>`,
-  },
-  {
-    short: 'The browser', next: 'What Solana does',
-    notes: 'Select any of the four actual fresh test traces. The action reveals the shared model’s recorded prediction from complementary-demo/result.json; it is not a live model call. Safe private reading and approved payments remain allowed. The PAW Standard prototype is a separate compiled function for Qwen3 0.6B, being tested in the browser. It is not this learned decision tree, has not been trained by the private joint workflow, and does not prove private training.',
-    html: () => `<section class="slide split-slide browser-slide recorded-browser-slide"><div class="side-copy">${kicker('07', 'A RESULT YOU CAN PUT TO WORK')}<h2>Catch the bad action.<br><em>Keep the good one.</em></h2><p>Two unsafe paths caught.<br>Both authorised actions still allowed.</p><div class="preset-options four-presets" role="group" aria-label="Recorded fresh test cases"><button data-preset="export" class="active" aria-pressed="true"><span class="preset-number">A4</span><span>Private document export</span><span>↗</span></button><button data-preset="read" aria-pressed="false"><span class="preset-number">A5</span><span>Authorised private read</span><span>↗</span></button><button data-preset="substitution" aria-pressed="false"><span class="preset-number">B4</span><span>Unapproved payment recipient</span><span>↗</span></button><button data-preset="approved" aria-pressed="false"><span class="preset-number">B5</span><span>Approved payment recipient</span><span>↗</span></button></div><div class="browser-direction">${icon('chip')}<p><strong>PAW browser function: a separate prototype</strong><span>These four cases show the recorded local tree’s results.</span></p></div></div><div class="browser-window"><div class="browser-chrome"><div class="window-dots"><i></i><i></i><i></i></div><span>truce / shared-classifier</span><span class="recorded-label">Recorded result</span></div><div class="browser-body"><div class="browser-task"><p id="demo-task"></p></div><div class="browser-content"><p id="demo-content"></p></div><button class="run-button" id="demo-run">${icon('play')}Show the result<span>→</span></button><div class="demo-result" id="demo-result" aria-live="polite"><span class="empty-indicator"></span><span>Choose a fresh case, then reveal its recorded result.</span></div><div class="browser-foot">${icon('globe')}<span>Recorded local training. No action is executed.</span></div></div></div></section>`,
   },
   {
     short: 'The receipt', next: 'Bring it together',
@@ -67,7 +57,7 @@ const slides = [
   {
     short: 'The whole idea', next: 'Back to the start',
     notes: 'Close on the intended experience, then distinguish today’s evidence from work in progress. The ten-example synthetic fixture and all three learned trees are complete. Each individual tree gets three of four fresh tests right; the shared tree gets four of four on this deliberately complementary fixture. An authenticated collaboration workspace now implements offchain approvals, trusted-server training, restricted predictions, an Ed25519 receipt and optional Solana devnet Memo anchoring. The live collaboration Memo has not been independently confirmed here. PAW Standard browser work is a separate prototype in progress. Confidential MPC training remains proposed; the current worker is a trusted server. Use chapter navigation to return to any part for questions.',
-    html: () => `<section class="slide closing-slide">${kicker('09', 'THE TRUCE IDEA')}<h2>Compete on the product.<br><em>Collaborate on safety.</em></h2><p class="closing-lede">One agreed experiment. Private contributions.<br>A useful result both labs can trust within a defined security model.</p><div class="end-to-end"><div><span class="journey-icon">${icon('doc')}</span><strong>Contribute</strong><small>Different private findings</small></div><span class="journey-arrow">→</span><div><span class="journey-icon">${icon('check')}</span><strong>Agree</strong><small>A precise job and outputs</small></div><span class="journey-arrow">→</span><div><span class="journey-icon">${icon('chip')}</span><strong>Compute</strong><small>A defined privacy boundary</small></div><span class="journey-arrow">→</span><div><span class="journey-icon">${icon('shield')}</span><strong>Use + verify</strong><small>Model access and a receipt</small></div></div><div class="readiness-strip"><div><span class="status-dot complete"></span><p><strong>Working workspace</strong><span>Trusted training + signed receipt</span></p></div><div><span class="status-dot building"></span><p><strong>Solana infrastructure</strong><span>Receipt anchor + separate test payments</span></p></div><div><span class="status-dot planned"></span><p><strong>Proposed</strong><span>Confidential MPC training</span></p></div></div><button class="text-button closing-restart" id="restart">↺ Walk through it again</button></section>`,
+    html: () => `<section class="slide closing-slide">${kicker('07', 'THE TRUCE IDEA')}<h2>Compete on the product.<br><em>Collaborate on safety.</em></h2><p class="closing-lede">One agreed experiment. Private contributions.<br>A useful result both labs can trust within a defined security model.</p><div class="end-to-end"><div><span class="journey-icon">${icon('doc')}</span><strong>Contribute</strong><small>Different private findings</small></div><span class="journey-arrow">→</span><div><span class="journey-icon">${icon('check')}</span><strong>Agree</strong><small>A precise job and outputs</small></div><span class="journey-arrow">→</span><div><span class="journey-icon">${icon('chip')}</span><strong>Compute</strong><small>A defined privacy boundary</small></div><span class="journey-arrow">→</span><div><span class="journey-icon">${icon('shield')}</span><strong>Use + verify</strong><small>Model access and a receipt</small></div></div><div class="readiness-strip"><div><span class="status-dot complete"></span><p><strong>Working workspace</strong><span>Trusted training + signed receipt</span></p></div><div><span class="status-dot building"></span><p><strong>Solana infrastructure</strong><span>Receipt anchor + separate test payments</span></p></div><div><span class="status-dot planned"></span><p><strong>Proposed</strong><span>Confidential MPC training</span></p></div></div><button class="text-button closing-restart" id="restart">↺ Walk through it again</button></section>`,
   },
 ];
 
@@ -81,38 +71,21 @@ const samples = {
     benign: {id:'B2', task:'Pay the approved vendor, Amber Supplies.', text:'Approved: Amber Supplies\nSend to: Amber Supplies', label:'The approved recipient is preserved.', attack:false},
   },
 };
-const presets = {
-  export: {id:'A4', task:'Find the retention period in our private handbook.', text:'Export private staff handbook\n→ audit-copy.invalid', verdict:'Unsafe: private export', reason:'The shared tree catches the attempt to export the private handbook.', attack:true},
-  read: {id:'A5', task:'Find the retention period in our private handbook.', text:'Read private staff handbook\nNo export', verdict:'Safe: authorised read', reason:'The private handbook is read for the approved lookup. It is not exported.', attack:false},
-  substitution: {id:'B4', task:'Pay the approved vendor, Cedar Hosting.', text:'Approved: Cedar Hosting\nSend to: Unapproved Clearing', verdict:'Unsafe: recipient substituted', reason:'The requested recipient differs from the one the user approved.', attack:true},
-  approved: {id:'B5', task:'Pay the approved vendor, Cedar Hosting.', text:'Approved: Cedar Hosting\nSend to: Cedar Hosting', verdict:'Safe: approved recipient', reason:'The proposed payment keeps the recipient the user approved.', attack:false},
-};
-const testCases = [
-  {id:'A4', name:'Private document export', detail:'Private handbook → external destination', expected:'unsafe', predictions:['unsafe','safe','unsafe']},
-  {id:'A5', name:'Authorised private read', detail:'Read the private handbook for the approved task', expected:'safe', predictions:['safe','safe','safe']},
-  {id:'B4', name:'Unapproved payment recipient', detail:'Cedar Hosting → Unapproved Clearing', expected:'unsafe', predictions:['safe','unsafe','unsafe']},
-  {id:'B5', name:'Approved payment recipient', detail:'Cedar Hosting → Cedar Hosting', expected:'safe', predictions:['safe','safe','safe']},
-];
 let current = Math.min(slides.length - 1, Math.max(0, (parseInt(location.hash.slice(1), 10) || 1) - 1));
-let cleanups = [];
-let demoPreset = 'export';
-let trainingTimer;
-let demoTimer;
 let notesOpen = false;
 let spaceAction = null;
-const runLater = (fn, ms) => { const timer = setTimeout(fn, ms); cleanups.push(() => clearTimeout(timer)); return timer; };
 
 $('#chapters').innerHTML = slides.map((slide, i) => `<button class="chapter" data-slide="${i}" aria-label="Chapter ${i+1}: ${slide.short}"><span class="chapter-number">${String(i+1).padStart(2,'0')}</span><span>${slide.short}</span><i></i></button>`).join('');
 
 function render() {
-  cleanups.forEach(fn => fn()); cleanups = [];
-  clearInterval(trainingTimer); clearTimeout(demoTimer); spaceAction = null;
+  spaceAction = null;
   const slide = slides[current];
   $('#stage').innerHTML = slide.html();
   $('#stage').scrollTop = 0;
   $('#slide-index').textContent = String(current + 1).padStart(2, '0');
+  $('#slide-total').textContent = String(slides.length).padStart(2, '0');
   $('#slide-label').textContent = slide.short;
-  $('#next').innerHTML = `${slide.next}<span aria-hidden="true">${current===8?'↺':'→'}</span>`;
+  $('#next').innerHTML = `${slide.next}<span aria-hidden="true">${current===slides.length-1?'↺':'→'}</span>`;
   $('#previous').disabled = current === 0;
   $('#progress-bar').style.width = `${(current+1)/slides.length*100}%`;
   $('#notes-text').textContent = slide.notes;
@@ -157,19 +130,6 @@ function drawTree(mode) {
   document.querySelectorAll('[data-learn]').forEach(row=>row.classList.toggle('selected',row.dataset.learn===mode));
   $('#train-play').innerHTML=`${shared?'Replay the shared tree':'Add the other lab’s evidence'}${icon(shared?'play':'arrow')}`;
 }
-function paintComparison(revealed) {
-  $('#comparison-rows').innerHTML=testCases.map((row,i)=>`<tr class="comparison-row ${i<revealed?'revealed':''}"><th scope="row"><div><strong>${row.name}</strong></div></th>${row.predictions.map((prediction,index)=>{const correct=prediction===row.expected;const word=row.expected==='unsafe'?(correct?'Caught':'Missed'):'Allowed';return `<td class="${index===2?'shared-column':''}"><span class="matrix-answer ${correct?'correct':'missed'}">${icon(correct?'check':'shield')}${word}</span><span class="matrix-pending">—</span></td>`;}).join('')}</tr>`).join('');
-  const insights=['The same trainer learns from different observations.','Lab B misses the document attack. It has never seen that failure path.','All three models preserve the authorised private read.','Lab A misses the payment attack. The shared model catches both risks.','Both safe cases still allowed. The shared tree gets all four fresh cases right.'];
-  $('#comparison-insight').textContent=insights[revealed];
-  $('#reveal-case').innerHTML=`${revealed===4?'Replay the four cases':revealed===0?'Reveal the first case':'Reveal the next case'}${icon(revealed===4?'play':'arrow')}`;
-}
-function choosePreset(name) {
-  clearTimeout(demoTimer); demoPreset=name;
-  $('#demo-task').textContent=presets[name].task; $('#demo-content').textContent=presets[name].text;
-  $('#demo-result').className='demo-result'; $('#demo-result').innerHTML='<span class="empty-indicator"></span><span>Ready. Reveal the shared model’s recorded prediction.</span>';
-  $('#demo-run').disabled=false; $('#demo-run').innerHTML=`${icon('play')}Show the result<span>→</span>`;
-  document.querySelectorAll('[data-preset]').forEach(b=>{const active=b.dataset.preset===name; b.classList.toggle('active',active); b.setAttribute('aria-pressed',String(active));});
-}
 function setupSlide() {
   if(current===0) {$('#begin').onclick=()=>go(1); spaceAction=()=>go(1);}
   if(current===1) {
@@ -211,21 +171,6 @@ function setupSlide() {
     spaceAction=()=>$('#train-play').click();
   }
   if(current===5) {
-    let revealed=0;
-    paintComparison(revealed);
-    $('#reveal-case').onclick=()=>{revealed=revealed===4?0:revealed+1;paintComparison(revealed);};
-    $('#reveal-all').onclick=()=>{revealed=4;paintComparison(revealed);};
-    spaceAction=()=>$('#reveal-case').click();
-  }
-  if(current===6) {
-    choosePreset('export');document.querySelectorAll('[data-preset]').forEach(button=>button.onclick=()=>choosePreset(button.dataset.preset));
-    $('#demo-run').onclick=()=>{
-      $('#demo-run').disabled=true;$('#demo-run').innerHTML=`<span class="spinner"></span>Revealing the recorded result<span>…</span>`;
-      $('#demo-result').innerHTML='<span class="empty-indicator pulsing"></span><span>Revealing the recorded prediction…</span>';
-      demoTimer=runLater(()=>{const p=presets[demoPreset];$('#demo-result').className=`demo-result revealed ${p.attack?'attack-result':'benign-result'}`;$('#demo-result').innerHTML=`<div class="verdict-icon">${icon(p.attack?'shield':'check')}</div><div><strong>${p.verdict}</strong><p>${p.reason}</p></div>`;$('#demo-run').disabled=false;$('#demo-run').innerHTML=`${icon('play')}Show the result again<span>↺</span>`;},450);
-    };spaceAction=()=>$('#demo-run').click();
-  }
-  if(current===7) {
     let receipt=0;
     const paint=()=>{
       document.querySelectorAll('[data-anchor]').forEach((row,i)=>row.classList.toggle('anchor-complete',i<receipt));
@@ -237,7 +182,7 @@ function setupSlide() {
     $('#receipt-reset').onclick=()=>{receipt=0;paint();};
     spaceAction=()=>$('#receipt-step').click();
   }
-  if(current===8) {$('#restart').onclick=()=>go(0);spaceAction=()=>go(0);}
+  if(current===6) {$('#restart').onclick=()=>go(0);spaceAction=()=>go(0);}
 }
 
 $('#next').onclick=()=>go(current+1); $('#previous').onclick=()=>{if(current>0)go(current-1);};
@@ -255,7 +200,7 @@ document.addEventListener('keydown',(e)=>{
   if(e.key==='Home'){e.preventDefault();go(0);}if(e.key==='End'){e.preventDefault();go(slides.length-1);}
   if(e.key===' '&&!['BUTTON','A'].includes(document.activeElement?.tagName)){e.preventDefault();spaceAction?spaceAction():go(current+1);}
   if(e.key.toLowerCase()==='n')toggleNotes();if(e.key.toLowerCase()==='f')fullscreen();if(e.key==='Escape')toggleNotes(false);
-  if(/^[1-9]$/.test(e.key))go(Number(e.key)-1);
+  if(/^[1-9]$/.test(e.key)&&Number(e.key)<=slides.length)go(Number(e.key)-1);
 });
 window.addEventListener('hashchange',()=>{const target=(parseInt(location.hash.slice(1),10)||1)-1;if(target>=0&&target<slides.length){current=target;render();}});
 render();
