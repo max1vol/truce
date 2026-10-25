@@ -43,12 +43,16 @@ Verified on the event platform:
 - The organiser's connection test reached the app and received its authenticated health response.
 - Idea locked in passed: 50 points.
 - App live passed: 150 points.
-- Last verified total: **200 points**.
+- AI feature working passed: 200 points. Fresh arithmetic, instruction following, health and nonce checks all passed on the first attempt.
+- Agent uses tools passed: 300 points. The organiser recorded both lookups and the exchange-rate call, verified the computed total and checked the reported results on the first attempt.
+- Last verified total: **700 points**.
 - App live receipt: `1735AD7F`.
+- AI feature working receipt: `82198361`.
+- Agent uses tools receipt: `3A0FA0EA`.
+- AI and tool deployment: commit `f8b7f0f` on `main`, verified on 25 October 2026.
 
 Not implemented or not verified:
 
-- Live organiser verification of the new model and tool capabilities; local implementation does not establish race points.
 - Payment signing and other task capabilities.
 - Wallet funding with devnet SOL and USDC.
 - Private data collaboration, confidential computing, model training or joint evaluation.
@@ -75,19 +79,16 @@ The private key must never be committed or copied into this document.
 
 The user has asked to focus on connecting and verifying the application before pursuing training or the larger privacy research prototype.
 
-1. **AI feature working, 200 points:** a real model correctly answers fresh `respond` tasks through the adapter.
-2. **Agent uses tools, 300 points:** the agent calls the organiser's supplied tools and computes an answer from their actual results.
-3. **Agentic end-to-end payment, 400 points:** a requested devnet USDC payment settles to the required recipient with the required amount and memo, and the app returns its transaction signature.
-4. **Submitted, 200 points:** an accurate final submission is received by the official Build Track.
+1. **Agentic end-to-end payment, 400 points:** a requested devnet USDC payment settles to the required recipient with the required amount and memo, and the app returns its transaction signature.
+2. **Submitted, 200 points:** an accurate final submission is received by the official Build Track.
 
-The remaining core milestones total 1,100 points, bringing the core total to 1,300 if they all pass. AI and tool use are the recommended next pair, bringing the total to 700.
+The remaining core milestones total 600 points, bringing the core total to 1,300 if they both pass. Recover the existing dedicated wallet's signing key before implementing payment; this clone currently has only its public address.
 
 Optional Operation and Minesweeper challenges offer another 350 points. They have separate instructions, ordered prerequisites and opening windows. Check the live race before spending time on them. Their completion is separate from the Truce product demonstration.
 
 ### Step 1: connect a real model
 
-- Local implementation uses OpenAI Responses with `gpt-5-mini` by default and a server-side key. Fresh arithmetic and uppercase checks pass locally.
-- Production deployment and the live race milestone still need verification before this step is complete.
+- Completed and verified live. The deployment uses OpenAI Responses with `gpt-5-mini` by default and a server-side production secret. Fresh arithmetic and uppercase checks also pass locally.
 - The fastest route is an existing model API connection. Hosting an open model on Modal is another option using the available compute credits.
 - Implement the `respond` handler, passing `task.input` to the model and returning its answer in `output.text`.
 - Preserve the ASRP/1 envelope and the exact incoming nonce.
@@ -99,8 +100,8 @@ Training is not required for this milestone.
 
 ### Step 2: implement real tool use
 
-- The local implementation supports model-selected calls to the organiser's read-only lookup and exchange-rate tools. Mutating tools remain unavailable until workflow spending controls are implemented.
-- Offline tests cover actual tool-loop wiring, credential isolation, transient recovery, deadlines, call limits, unsafe endpoints and aggregate response bounds. These tests do not establish live organiser acceptance.
+- Completed and verified live. The implementation supports model-selected calls to the organiser's read-only lookup and exchange-rate tools. Mutating tools remain unavailable until workflow spending controls are implemented.
+- Fourteen offline tests cover actual tool-loop wiring, credential isolation, transient recovery, deadlines, call limits, unsafe endpoints and aggregate response bounds. A separate live model check used synthetic tool data before the official live verification.
 - Accept the tool definitions supplied in `task.tools`.
 - Let the agent choose the relevant supplied tools and arguments.
 - Call their URLs with `task.challengeToken` as the Bearer credential.
