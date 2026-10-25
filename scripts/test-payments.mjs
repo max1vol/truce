@@ -197,14 +197,23 @@ await test("storage failure prevents broadcasting even after a candidate was sig
   assert.equal(f.broadcasts.length, 0);
 });
 
-await test("durable mark failure after confirmation returns no false success and cannot repay", async () => {
+await test("final mark failure preserves the confirmed result and cannot cause a second payment", async () => {
   const f = fixture(); const mark = f.dependencies.store.mark;
   f.dependencies.store.mark = async () => { throw new PaymentStoreError("unavailable", "store write failed"); };
-  await rejects(() => executePaymentTask(request(), f.dependencies), "upstream_unavailable");
+  const confirmed = await executePaymentTask(request(), f.dependencies);
+  assert.equal(confirmed.data.signature, signatureFor(1));
   assert.equal(f.broadcasts.length, 1);
+  const [durable] = Object.values(f.io.snapshot().records);
+  assert.equal(durable.status, "prepared");
+  assert.equal(durable.signature, confirmed.data.signature);
+  assert.equal(f.io.snapshot().reservedMicros, 10_000);
+  const whileMarkStillFails = await executePaymentTask(request(), f.dependencies);
+  assert.deepEqual(whileMarkStillFails, confirmed);
+  assert.equal(f.prepared(), 1); assert.equal(f.broadcasts.length, 1);
   f.dependencies.store.mark = mark;
   const retried = await executePaymentTask(request(), f.dependencies);
-  assert.equal(retried.data.signature, signatureFor(1)); assert.equal(f.prepared(), 1); assert.equal(f.broadcasts.length, 1);
+  assert.deepEqual(retried, confirmed); assert.equal(f.prepared(), 1); assert.equal(f.broadcasts.length, 1);
+  assert.equal(Object.values(f.io.snapshot().records)[0].status, "confirmed");
 });
 
 await test("failed transactions remain bound and never generate another payment", async () => {
@@ -229,7 +238,7 @@ await test("corrupted or wrong-wallet journals fail closed before preparing or b
 });
 
 await test("missing or unsafe journal ETags prevent signing, writes and broadcasts", async () => {
-  for (const etag of [undefined, null, "", " ", "\t", "*", " 1", "1 ", "1\r\nInjected: value"]) {
+  for (const etag of [undefined, null, "", " ", "\t", "*", " 1", "1 ", 'W/"hash"', 'w/"hash"', "1\r\nInjected: value"]) {
     const io = ledgerIO(); const read = io.read;
     io.read = async () => ({ ...(await read()), etag });
     const f = fixture({ io });

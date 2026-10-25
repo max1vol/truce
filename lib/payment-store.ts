@@ -67,7 +67,9 @@ function blobIO(wallet: string, token: string | undefined): PaymentLedgerIO {
   return {
     async read(signal) {
       try {
-        const result = await get(pathname, { access: "private", useCache: false, ...credentials, abortSignal: signal });
+        // Compression can weaken the HTTP ETag, which cannot safely guard a Blob write.
+        // The identity response binds these exact bytes to the strong version used by CAS.
+        const result = await get(pathname, { access: "private", useCache: false, headers: { "accept-encoding": "identity" }, ...credentials, abortSignal: signal });
         if (!result || result.statusCode !== 200) throw new PaymentStoreError("unavailable", "The durable payment journal must be initialized before payments are enabled.");
         if (!Number.isFinite(result.blob.size) || result.blob.size < 0 || result.blob.size > MAX_LEDGER_BYTES) {
           await result.stream.cancel();
@@ -116,7 +118,7 @@ export function createPaymentStore(wallet: string, options: { io?: PaymentLedger
   const io = options.io ?? blobIO(wallet, options.token ?? process.env.BLOB_READ_WRITE_TOKEN);
   async function read(signal: AbortSignal) {
     const result = await io.read(signal);
-    if (typeof result.etag !== "string" || !result.etag.trim() || result.etag.trim() !== result.etag || result.etag === "*" || /[\r\n]/.test(result.etag)) {
+    if (typeof result.etag !== "string" || !result.etag.trim() || result.etag.trim() !== result.etag || result.etag === "*" || /^w\//i.test(result.etag) || /[\r\n]/.test(result.etag)) {
       throw new PaymentStoreError("corrupt", "The payment journal is missing its conditional-write version.");
     }
     return { ledger: checkedLedger(result.ledger, wallet), etag: result.etag };

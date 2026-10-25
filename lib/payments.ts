@@ -163,7 +163,10 @@ export async function executePaymentTask(body: JsonRecord, dependencies: Payment
       if (signal.aborted) throw new PaymentTaskError(504, "upstream_timeout", "Payment confirmation timed out. Retry this same attempt to check its existing transaction.");
       const status = await chain.status(record.signature, signal);
       if (status === "confirmed") {
-        await store.mark(id, "confirmed", signal);
+        // Settlement is already known and the original signed bytes remain durably bound.
+        // A journal status update failure cannot turn a settled transfer into a failure
+        // or cause a retry to create another transaction.
+        try { await store.mark(id, "confirmed", signal); } catch { /* Retry will check the same signature. */ }
         return { data: { signature: record.signature } };
       }
       if (status === "failed") {
