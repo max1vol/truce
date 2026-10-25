@@ -1,13 +1,18 @@
 import {
   authenticateRaceRequest,
+  isRecord,
   raceError,
+  raceJson,
+  RACE_PROTOCOL,
   readNonce,
   readRaceBody,
   validateRaceTask,
 } from "@/lib/race";
+import { AiTaskError, executeAiTask } from "@/lib/ai";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 export async function POST(request: Request): Promise<Response> {
   const authError = authenticateRaceRequest(request);
@@ -24,12 +29,24 @@ export async function POST(request: Request): Promise<Response> {
   const validationError = validateRaceTask(body);
   if (validationError) return raceError(400, "invalid_input", validationError, nonce);
 
-  // App-live readiness is independent of the AI milestone. A model integration
-  // must replace this response before any AI task can truthfully succeed.
+  if (isRecord(body) && isRecord(body.task) && (body.task.type === "respond" || body.task.type === "use_tools")) {
+    try {
+      const output = await executeAiTask(body.task, { signal: request.signal });
+      const envelope = { protocol: RACE_PROTOCOL, nonce, status: "ok", output };
+      if (new TextEncoder().encode(JSON.stringify(envelope)).byteLength > 256 * 1024) {
+        return raceError(422, "limit_exceeded", "The task result exceeded the supported response size.", nonce);
+      }
+      return raceJson(envelope);
+    } catch (error) {
+      if (error instanceof AiTaskError) return raceError(error.status, error.code, error.message, nonce);
+      return raceError(503, "upstream_unavailable", "The task could not be completed.", nonce);
+    }
+  }
+
   return raceError(
     503,
     "upstream_unavailable",
-    "This deployment does not yet execute AI tasks. No AI result has been generated.",
+    "This task capability has not been implemented. No result has been generated.",
     nonce,
   );
 }

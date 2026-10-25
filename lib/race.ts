@@ -15,6 +15,7 @@ type ErrorCode =
   | "invalid_input"
   | "unauthorized"
   | "upstream_unavailable"
+  | "upstream_timeout"
   | "limit_exceeded";
 
 export function raceJson(body: unknown, status = 200): Response {

@@ -28,7 +28,10 @@ Implemented:
 - Server-side ASRP/1 authentication with `AGENT_STUDIO_VERIFIER_TOKEN`.
 - Health endpoint at `/agent-studio/v1/health`.
 - Task endpoint at `/agent-studio/v1/tasks`, including request validation, nonce handling and error envelopes.
-- Explicit unavailable responses for valid AI tasks until a real model integration exists.
+- OpenAI Responses integration for authenticated `respond` tasks.
+- Model-selected read-only `lookup_record` and `exchange_rate` calls for `use_tools`, with real tool results and structured output.
+- Bounded retries, time and call budgets, exact organiser URL restrictions, credential isolation and response size limits.
+- Explicit unavailable responses for task capabilities that have not been implemented.
 - Solana devnet wallet generation using `@solana/kit`.
 - Private wallet storage in the ignored `.env.local` file, with restricted permissions.
 - Public wallet configuration on the Vercel application.
@@ -45,7 +48,8 @@ Verified on the event platform:
 
 Not implemented or not verified:
 
-- AI model calls, agent tool execution and payment signing.
+- Live organiser verification of the new model and tool capabilities; local implementation does not establish race points.
+- Payment signing and other task capabilities.
 - Wallet funding with devnet SOL and USDC.
 - Private data collaboration, confidential computing, model training or joint evaluation.
 - A final Build Track submission.
@@ -82,7 +86,8 @@ Optional Operation and Minesweeper challenges offer another 350 points. They hav
 
 ### Step 1: connect a real model
 
-- Choose and configure model access. No provider has been selected or provisioned for this release.
+- Local implementation uses OpenAI Responses with `gpt-5-mini` by default and a server-side key. Fresh arithmetic and uppercase checks pass locally.
+- Production deployment and the live race milestone still need verification before this step is complete.
 - The fastest route is an existing model API connection. Hosting an open model on Modal is another option using the available compute credits.
 - Implement the `respond` handler, passing `task.input` to the model and returning its answer in `output.text`.
 - Preserve the ASRP/1 envelope and the exact incoming nonce.
@@ -94,6 +99,8 @@ Training is not required for this milestone.
 
 ### Step 2: implement real tool use
 
+- The local implementation supports model-selected calls to the organiser's read-only lookup and exchange-rate tools. Mutating tools remain unavailable until workflow spending controls are implemented.
+- Offline tests cover actual tool-loop wiring, credential isolation, transient recovery, deadlines, call limits, unsafe endpoints and aggregate response bounds. These tests do not establish live organiser acceptance.
 - Accept the tool definitions supplied in `task.tools`.
 - Let the agent choose the relevant supplied tools and arguments.
 - Call their URLs with `task.challengeToken` as the Bearer credential.

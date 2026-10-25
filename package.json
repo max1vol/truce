@@ -8,7 +8,8 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "wallet": "node scripts/wallet.mjs",
-    "test:adapter": "node scripts/test-adapter.mjs"
+    "test:adapter": "node scripts/test-adapter.mjs",
+    "test:ai": "node scripts/test-ai.mjs"
   },
   "engines": {
     "node": ">=22"

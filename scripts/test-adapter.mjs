@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { randomInt, randomUUID } from "node:crypto";
 
 const baseUrl = process.env.ADAPTER_BASE_URL ?? "http://localhost:3000";
 const token = process.env.AGENT_STUDIO_VERIFIER_TOKEN;
@@ -6,7 +7,7 @@ if (!token) throw new Error("Set AGENT_STUDIO_VERIFIER_TOKEN to the local server
 
 const auth = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
 const endpoint = (path) => new URL(`/agent-studio/v1/${path}`, baseUrl);
-const nonce = "adapter-smoke-test";
+const nonce = `adapter-smoke-${randomUUID()}`;
 const request = { protocol: "asrp/1", nonce, task: { type: "respond", input: "What is 2 + 2?" } };
 
 async function check(name, response, status, code, expectedNonce) {
@@ -41,5 +42,28 @@ await check("unknown task echoes nonce", await post({ ...request, task: { type: 
 await check("missing task input", await post({ ...request, task: { type: "respond" } }), 400, "invalid_input", nonce);
 await check("missing extraction schema", await post({ ...request, task: { type: "extract", input: "test" } }), 400, "invalid_input", nonce);
 await check("missing tools", await post({ ...request, task: { type: "use_tools", input: "test" } }), 400, "invalid_input", nonce);
-await check("AI honestly unavailable", await post(request), 503, "upstream_unavailable", nonce);
+await check("unsupported task honestly unavailable", await post({
+  ...request,
+  task: { type: "extract", input: "A sample", schema: { type: "object" } },
+}), 503, "upstream_unavailable", nonce);
 await check("bounded request body", await post({ ...request, task: { type: "respond", input: "x".repeat(70_000) } }), 400, "invalid_input", null);
+
+// Opt in because these requests use the deployment's real model and API quota.
+if (process.env.ADAPTER_TEST_AI === "1") {
+  const a = randomInt(10, 100);
+  const b = randomInt(10, 100);
+  const word = `truce${randomUUID().replaceAll("-", "").slice(0, 8)}`;
+  for (const [name, input, expected] of [
+    ["fresh AI arithmetic", `What is ${a} + ${b}? Reply with only the number.`, String(a + b)],
+    ["fresh AI uppercase", `Convert this to uppercase. Reply with only the converted text: ${word}`, word.toUpperCase()],
+  ]) {
+    const taskNonce = randomUUID();
+    const body = await check(name, await post({
+      protocol: "asrp/1", nonce: taskNonce,
+      task: { type: "respond", input, limits: { timeoutMs: 20_000 } },
+    }), 200);
+    assert.equal(body.status, "ok", `${name}: success status`);
+    assert.equal(body.nonce, taskNonce, `${name}: nonce`);
+    assert.equal(body.output?.text?.trim(), expected, `${name}: model answer`);
+  }
+}
