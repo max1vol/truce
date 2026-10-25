@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f4ed">
+  <title>Truce · Share the learning. Keep the secrets.</title>
+  <meta name="description" content="A guided, interactive story of two AI labs building a shared safety model while controlling their contributions.">
+  <link rel="icon" href="./mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css?v=20261025-1756">
+  <link rel="stylesheet" href="./content.css?v=20261025-1756">
+  <link rel="stylesheet" href="./projector.css?v=20261025-1756">
+  <script src="./frame.js?v=20261025-1756" type="module"></script>
+  <script src="./app.js?v=20261025-1756" type="module"></script>
+</head>
+<body>
+  <div class="presentation">
+    <header class="topbar">
+      <a class="brand" href="#1" aria-label="Truce, beginning"><svg viewBox="0 0 30 30" aria-hidden="true"><path d="M10 5H5v20h5M20 5h5v20h-5M10 15h10"/></svg><span>truce</span></a>
+      <div class="top-label"><span class="live-dot"></span>PRIVATE AI, SHARED PROGRESS</div>
+      <div class="top-actions"><span class="edition">AN INTERACTIVE EXPLAINER</span><button class="icon-button" id="notes-toggle" aria-label="Show presenter notes" title="Presenter notes (N)"><svg viewBox="0 0 20 20"><path d="M5 3h10v14H5zM8 7h4M8 10h4M8 13h2"/></svg></button><button class="icon-button" id="fullscreen" aria-label="Enter fullscreen" title="Fullscreen (F)"><svg viewBox="0 0 20 20"><path d="M7 3H3v4m10-4h4v4M3 13v4h4m10-4v4h-4"/></svg></button></div>
+    </header>
+    <nav class="chapters" aria-label="Presentation chapters" id="chapters"></nav>
+    <main id="stage" tabindex="-1" aria-label="Current presentation slide"></main>
+    <aside class="presenter-notes" id="presenter-notes" hidden><div><span>PRESENTER NOTES</span><button id="close-notes" class="icon-button" aria-label="Close presenter notes">×</button></div><p id="notes-text"></p></aside>
+    <footer class="controls">
+      <div class="slide-position"><span id="slide-index">01</span><span class="position-divider">/</span><span id="slide-total">09</span><span id="slide-label">The idea</span></div>
+      <div class="key-hint"><kbd>←</kbd><kbd>→</kbd><span>to explore</span><span class="hint-dot">·</span><kbd>N</kbd><span>notes</span></div>
+      <div class="navigation"><button class="back" id="previous" aria-label="Previous slide"><span aria-hidden="true">←</span> Back</button><button class="next" id="next">The problem <span aria-hidden="true">→</span></button></div>
+    </footer>
+    <div class="progress-track"><div id="progress-bar"></div></div>
+  </div>
+  <div class="sr-only" id="announcement" aria-live="polite"></div>
+</body>
+</html>
